@@ -1,4 +1,4 @@
-package com.estebanposada.rickmorty_app.ui.screens.list
+package com.estebanposada.rickmorty_app.ui.screens.list.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +36,7 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.estebanposada.rickmorty_app.R
+import com.estebanposada.rickmorty_app.ui.screens.list.components.CharacterUi
 import com.estebanposada.rickmorty_app.ui.theme.RickMortyTheme
 
 @Composable

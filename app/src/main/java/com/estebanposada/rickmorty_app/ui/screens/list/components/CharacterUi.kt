@@ -1,4 +1,4 @@
-package com.estebanposada.rickmorty_app.ui.screens.list
+package com.estebanposada.rickmorty_app.ui.screens.list.components
 
 import androidx.compose.ui.graphics.Color
 

@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.estebanposada.rickmorty_app.R
+import com.estebanposada.rickmorty_app.ui.screens.list.components.CharacterItem
+import com.estebanposada.rickmorty_app.ui.screens.list.components.CharacterUi
 import com.estebanposada.rickmorty_app.ui.theme.RickMortyTheme
 
 @Composable
@@ -110,7 +112,6 @@ private fun CharacterListLoadingPreview() {
 @Preview
 @Composable
 private fun CharacterListDataPreview() {
-    val name = "Name"
     val data = List(3) {
         CharacterUi(
             name = "Name $it",
