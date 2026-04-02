@@ -68,6 +68,9 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.coil3.compose)
     implementation(libs.coil3.network.okhttp)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)

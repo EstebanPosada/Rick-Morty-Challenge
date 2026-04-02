@@ -8,8 +8,9 @@ import com.estebanposada.rickmorty_app.ui.screens.common.onSuccess
 import com.estebanposada.rickmorty_app.ui.screens.common.toUi
 import com.estebanposada.rickmorty_app.ui.screens.common.toUserMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,14 +19,17 @@ class CharacterListViewModel @Inject constructor(
     private val getCharactersUseCase: GetCharactersUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<CharacterListState>(CharacterListState.Loading)
-    val state: StateFlow<CharacterListState> = _state
+    val state = _state.asStateFlow()
+
+    private var fetchJob: Job? = null
 
     init {
         fetchCharacters()
     }
 
     private fun fetchCharacters() {
-        viewModelScope.launch {
+        if (fetchJob?.isActive == true) return
+        fetchJob = viewModelScope.launch {
             _state.value = CharacterListState.Loading
             getCharactersUseCase().onSuccess { characters ->
                 _state.value = CharacterListState.Success(characters.map { it.toUi() })
@@ -35,7 +39,7 @@ class CharacterListViewModel @Inject constructor(
         }
     }
 
-    fun retry() {
+    fun onRetry() {
         fetchCharacters()
     }
 }

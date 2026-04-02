@@ -10,7 +10,6 @@ data class Character(
     val origin: Origin,
     val location: Origin,
     val image: String,
-    val url: String
 )
 
 

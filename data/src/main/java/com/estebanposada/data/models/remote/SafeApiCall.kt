@@ -7,13 +7,13 @@ import retrofit2.HttpException
 
 suspend fun <T> safeApiCall(apiCall: suspend () -> T): Resource<T> = try {
     Resource.Success(apiCall())
-} catch (_: IOException) {
+} catch (e: IOException) {
     Resource.Error(AppError.Network)
 } catch (e: HttpException) {
     when (e.code()) {
         401 -> Resource.Error(AppError.Unauthorized)
         else -> Resource.Error(AppError.Unknown)
     }
-} catch (_: Exception) {
+} catch (e: Exception) {
     Resource.Error(AppError.Unknown)
 }

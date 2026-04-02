@@ -1,6 +1,7 @@
 package com.estebanposada.rickmorty_app.ui.screens.list.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -36,13 +36,14 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.estebanposada.rickmorty_app.R
-import com.estebanposada.rickmorty_app.ui.screens.list.components.CharacterUi
+import com.estebanposada.rickmorty_app.ui.screens.common.StatusBadge
 import com.estebanposada.rickmorty_app.ui.theme.RickMortyTheme
 
 @Composable
 fun CharacterItem(
     modifier: Modifier = Modifier,
-    item: CharacterUi
+    item: CharacterUi,
+    onClick: (String) -> Unit
 ) {
     val context = LocalContext.current
     val imageRequest = remember(item.imageUrl) {
@@ -52,7 +53,8 @@ fun CharacterItem(
     Card(
         modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 4.dp),
+            .padding(horizontal = 12.dp, vertical = 4.dp)
+            .clickable { onClick(item.id) },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
@@ -89,19 +91,11 @@ fun CharacterItem(
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Surface(
-                        color = item.statusColor.copy(alpha = 0.1f),
-                        shape = RoundedCornerShape(50)
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(horizontal = 4.dp),
-                            text = item.statusText,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = item.statusColor,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                    StatusBadge(
+                        modifier = Modifier,
+                        text = item.statusText,
+                        color = item.statusColor
+                    )
                     Spacer(modifier = Modifier.width(10.dp))
                     Image(
                         painter = painterResource(item.genderIcon),
@@ -124,8 +118,8 @@ private fun CharacterItemPreview() {
                 id = "id",
                 statusText = "status",
                 statusColor = Color.Gray,
-                genderIcon = 0
-            ),
+                genderIcon = R.drawable.ic_type
+            ), onClick = {}
         )
     }
 }

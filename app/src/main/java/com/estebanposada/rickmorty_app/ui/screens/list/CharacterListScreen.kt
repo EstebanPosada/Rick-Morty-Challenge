@@ -38,14 +38,20 @@ fun CharacterListScreenRoot(
     onItemClick: (String) -> Unit
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
-    CharacterListScreen(state.value, modifier = modifier, onRetry = { viewModel.retry() })
+    CharacterListScreen(
+        state.value,
+        modifier = modifier,
+        onRetry = viewModel::onRetry,
+        onItemClick = onItemClick
+    )
 }
 
 @Composable
 fun CharacterListScreen(
     state: CharacterListState,
     modifier: Modifier = Modifier,
-    onRetry: () -> Unit
+    onRetry: () -> Unit,
+    onItemClick: (String) -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         when (state) {
@@ -72,7 +78,7 @@ fun CharacterListScreen(
                         key = { it.id },
                         contentType = { "character" }
                     ) {
-                        CharacterItem(item = it)
+                        CharacterItem(item = it, onClick = onItemClick)
                     }
                 }
             }
@@ -105,7 +111,7 @@ fun CharacterListScreen(
 private fun CharacterListLoadingPreview() {
     val state = CharacterListState.Loading
     RickMortyTheme {
-        CharacterListScreen(state, onRetry = {})
+        CharacterListScreen(state, onRetry = {}, onItemClick = {})
     }
 }
 
@@ -119,12 +125,12 @@ private fun CharacterListDataPreview() {
             id = "id$it",
             statusText = "status",
             statusColor = Color.Gray,
-            genderIcon = 0
+            genderIcon = R.drawable.ic_unknown
         )
     }
     val state = CharacterListState.Success(data)
     RickMortyTheme {
-        CharacterListScreen(state = state, onRetry = {})
+        CharacterListScreen(state = state, onRetry = {}, onItemClick = {})
     }
 }
 
@@ -133,6 +139,6 @@ private fun CharacterListDataPreview() {
 private fun CharacterErrorDataPreview() {
     val state = CharacterListState.Error("Error")
     RickMortyTheme {
-        CharacterListScreen(state = state, onRetry = {})
+        CharacterListScreen(state = state, onRetry = {}, onItemClick = {})
     }
 }

@@ -1,5 +1,6 @@
 package com.estebanposada.data.models
 
+import com.estebanposada.data.models.local.CharacterEntity
 import com.estebanposada.data.models.model.CharacterDto
 import com.estebanposada.domain.models.Character
 import com.estebanposada.domain.models.Gender
@@ -16,7 +17,6 @@ fun CharacterDto.toCharacter() = Character(
     origin = Origin(name = name, url = name),
     location = Origin(name = name, url = name),
     image = image,
-    url = name
 )
 
 fun String.toGender() = when (lowercase()) {
@@ -31,3 +31,25 @@ fun String.toStatus() = when (lowercase()) {
     "dead" -> Status.DEAD
     else -> Status.UNKNOWN
 }
+
+fun CharacterDto.toEntity() = CharacterEntity(
+    id = id,
+    name = name,
+    gender = gender,
+    species = species,
+    type = type,
+    status = status,
+    image = image,
+)
+
+fun CharacterEntity.toDomain() = Character(
+    id = id,
+    name = name,
+    gender = gender.toGender(),
+    species = species,
+    type = type,
+    status = status.toStatus(),
+    origin = Origin(name = name, url = name),
+    location = Origin(name = name, url = name),
+    image = image,
+)
