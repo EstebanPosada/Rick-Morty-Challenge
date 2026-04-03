@@ -4,6 +4,6 @@ import com.estebanposada.domain.Resource
 import com.estebanposada.domain.models.Character
 
 interface CharacterRepository {
-    suspend fun getCharacters(): Resource<List<Character>>
+    suspend fun getCharacters(page: Int): Resource<List<Character>>
     suspend fun getCharacterById(id: String): Resource<Character>
 }

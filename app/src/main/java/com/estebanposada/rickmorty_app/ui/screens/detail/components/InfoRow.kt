@@ -44,7 +44,7 @@ fun InfoRow(
 
             Text(
                 text = value,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium
             )
         }

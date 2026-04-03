@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -25,7 +24,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -34,6 +32,7 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.estebanposada.rickmorty_app.R
+import com.estebanposada.rickmorty_app.ui.screens.common.ErrorComponent
 import com.estebanposada.rickmorty_app.ui.screens.common.StatusBadge
 import com.estebanposada.rickmorty_app.ui.screens.detail.components.DetailUi
 import com.estebanposada.rickmorty_app.ui.screens.detail.components.InfoRow
@@ -59,20 +58,11 @@ fun CharacterDetailScreen(
             .padding(6.dp)
     ) {
         when (state) {
-            is CharacterDetailState.Error -> Column(
+            is CharacterDetailState.Error -> ErrorComponent(
                 modifier = Modifier.align(Alignment.Center),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = state.message,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.error,
-                    textAlign = TextAlign.Center
-                )
-                Button(onClick = onRetry) {
-                    Text(text = "Retry", style = MaterialTheme.typography.labelMedium)
-                }
-            }
+                message = state.message,
+                onRetry = onRetry
+            )
 
             CharacterDetailState.Loading -> CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center)
@@ -81,8 +71,7 @@ fun CharacterDetailScreen(
             is CharacterDetailState.Success -> {
                 val context = LocalContext.current
                 val imageRequest =
-                    ImageRequest.Builder(context).data(state.data.imageUrl).crossfade(false)
-                        .size(150).build()
+                    ImageRequest.Builder(context).data(state.data.imageUrl).crossfade(true).build()
                 LazyColumn(
                     modifier = modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -110,7 +99,7 @@ fun CharacterDetailScreen(
                                 fontWeight = FontWeight.Bold
                             )
                             StatusBadge(
-                                modifier = Modifier,
+                                modifier = Modifier.padding(bottom = 12.dp, start = 8.dp),
                                 text = state.data.statusText,
                                 color = state.data.statusColor
                             )

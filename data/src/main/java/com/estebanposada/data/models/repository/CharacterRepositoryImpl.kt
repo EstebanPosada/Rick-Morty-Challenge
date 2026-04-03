@@ -15,8 +15,8 @@ class CharacterRepositoryImpl @Inject constructor(
     private val dao: CharacterDao
 ) :
     CharacterRepository {
-    override suspend fun getCharacters(): Resource<List<Character>> =
-        when (val response = safeApiCall { api.getCharacters() }) {
+    override suspend fun getCharacters(page: Int): Resource<List<Character>> =
+        when (val response = safeApiCall { api.getCharacters(page) }) {
             is Resource.Success -> {
                 val data = response.data.results.map { it.toEntity() }
                 dao.insertAll(data)
@@ -47,6 +47,4 @@ class CharacterRepositoryImpl @Inject constructor(
             is Resource.Error -> response
         }
     }
-
-    private suspend fun getLocalCharacters() = dao.getAllCharacters().map { it.toDomain() }
 }

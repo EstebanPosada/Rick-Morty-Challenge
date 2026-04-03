@@ -10,7 +10,8 @@ import com.estebanposada.rickmorty_app.ui.screens.common.toUserMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,28 +19,58 @@ import javax.inject.Inject
 class CharacterListViewModel @Inject constructor(
     private val getCharactersUseCase: GetCharactersUseCase
 ) : ViewModel() {
-    private val _state = MutableStateFlow<CharacterListState>(CharacterListState.Loading)
-    val state = _state.asStateFlow()
+    private val _state = MutableStateFlow(CharacterListState())
+    val state: StateFlow<CharacterListState> = _state
 
     private var fetchJob: Job? = null
+    private var currentPage = 1
+    private var hasMore = true
 
     init {
-        fetchCharacters()
+        loadInitial()
     }
 
-    private fun fetchCharacters() {
-        if (fetchJob?.isActive == true) return
-        fetchJob = viewModelScope.launch {
-            _state.value = CharacterListState.Loading
-            getCharactersUseCase().onSuccess { characters ->
-                _state.value = CharacterListState.Success(characters.map { it.toUi() })
+    private fun loadInitial() {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true, error = null) }
+            getCharactersUseCase(page = 1).onSuccess { characters ->
+                val items = characters.map { it.toUi() }
+                currentPage = 1
+                hasMore = items.isNotEmpty()
+                _state.update { it.copy(data = items, isLoading = false) }
             }.onFailure { error ->
-                _state.value = CharacterListState.Error(error.toUserMessage())
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = error.toUserMessage()
+                    )
+                }
             }
         }
     }
 
+    fun loadNextPage() {
+        val current = _state.value
+
+        if (current.isLoading || current.isLoadingMore || !hasMore) return
+        if (fetchJob?.isActive == true) return
+        fetchJob = viewModelScope.launch {
+            _state.update { it.copy(isLoadingMore = true) }
+            getCharactersUseCase(currentPage++).onSuccess { characters ->
+                val newItems = characters.map { it.toUi() }
+                hasMore = newItems.isNotEmpty()
+                currentPage++
+                _state.update {
+                    it.copy(
+                        data = (it.data + newItems).distinctBy { item -> item.id },
+                        isLoadingMore = false
+                    )
+                }
+            }.onFailure { _state.update { it.copy(isLoadingMore = false) } }
+        }
+    }
+
     fun onRetry() {
-        fetchCharacters()
+        loadInitial()
     }
 }

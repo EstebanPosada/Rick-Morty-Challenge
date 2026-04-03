@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Rick&amp;Morty_APP</string>
     <string name="characters">Characters</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="retry">Retry</string>
+
 </resources>

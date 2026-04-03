@@ -1,33 +1,18 @@
 package com.estebanposada.rickmorty_app.ui.screens.list
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.estebanposada.rickmorty_app.R
-import com.estebanposada.rickmorty_app.ui.screens.list.components.CharacterItem
+import com.estebanposada.rickmorty_app.ui.screens.common.ErrorComponent
+import com.estebanposada.rickmorty_app.ui.screens.list.components.CharacterListContent
 import com.estebanposada.rickmorty_app.ui.screens.list.components.CharacterUi
 import com.estebanposada.rickmorty_app.ui.theme.RickMortyTheme
 
@@ -42,6 +27,7 @@ fun CharacterListScreenRoot(
         state.value,
         modifier = modifier,
         onRetry = viewModel::onRetry,
+        onLoadMore = viewModel::loadNextPage,
         onItemClick = onItemClick
     )
 }
@@ -51,57 +37,26 @@ fun CharacterListScreen(
     state: CharacterListState,
     modifier: Modifier = Modifier,
     onRetry: () -> Unit,
+    onLoadMore: () -> Unit,
     onItemClick: (String) -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        when (state) {
-            is CharacterListState.Success -> {
-                val listState = rememberLazyListState()
-                LazyColumn(
-                    state = listState,
-                    contentPadding = PaddingValues(vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    stickyHeader {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.background)
-                                .padding(12.dp),
-                            text = stringResource(R.string.characters),
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    items(
-                        items = state.data,
-                        key = { it.id },
-                        contentType = { "character" }
-                    ) {
-                        CharacterItem(item = it, onClick = onItemClick)
-                    }
-                }
-            }
-
-            CharacterListState.Loading -> CircularProgressIndicator(
+        when {
+            state.isLoading && state.data.isEmpty() -> CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center)
             )
 
-            is CharacterListState.Error ->
-                Column(
-                    modifier = Modifier.align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = state.message,
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center
-                    )
-                    Button(onClick = onRetry) {
-                        Text(text = "Retry", style = MaterialTheme.typography.labelMedium)
-                    }
-                }
+            state.error != null && state.data.isEmpty() -> ErrorComponent(
+                modifier = Modifier.align(
+                    Alignment.Center
+                ), message = state.error, onRetry = onRetry
+            )
+
+            else -> CharacterListContent(
+                state = state,
+                onLoadMore = onLoadMore,
+                onItemClick = onItemClick
+            )
         }
     }
 }
@@ -109,9 +64,9 @@ fun CharacterListScreen(
 @Preview
 @Composable
 private fun CharacterListLoadingPreview() {
-    val state = CharacterListState.Loading
+    val state = CharacterListState(isLoading = true)
     RickMortyTheme {
-        CharacterListScreen(state, onRetry = {}, onItemClick = {})
+        CharacterListScreen(state, onRetry = {}, onItemClick = {}, onLoadMore = {})
     }
 }
 
@@ -128,17 +83,17 @@ private fun CharacterListDataPreview() {
             genderIcon = R.drawable.ic_unknown
         )
     }
-    val state = CharacterListState.Success(data)
+    val state = CharacterListState(data)
     RickMortyTheme {
-        CharacterListScreen(state = state, onRetry = {}, onItemClick = {})
+        CharacterListScreen(state = state, onRetry = {}, onItemClick = {}, onLoadMore = {})
     }
 }
 
 @Preview
 @Composable
 private fun CharacterErrorDataPreview() {
-    val state = CharacterListState.Error("Error")
+    val state = CharacterListState(error = "Error")
     RickMortyTheme {
-        CharacterListScreen(state = state, onRetry = {}, onItemClick = {})
+        CharacterListScreen(state = state, onRetry = {}, onItemClick = {}, onLoadMore = {})
     }
 }
