@@ -1,4 +1,4 @@
-package com.estebanposada.data.models.local
+package com.estebanposada.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

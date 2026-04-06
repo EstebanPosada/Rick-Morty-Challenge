@@ -135,9 +135,9 @@ Given the time constraints, the following aspects were simplified or left out:
 
 With more time, the following improvements would be considered:
 
-* Add unit tests and UI tests
-* Improve offline-first strategy (single source of truth with Flow)
-* Add loading skeletons instead of simple indicators
-* Implement Paging 3 for robust pagination
-* Enhance error handling with better user feedback
-
+- [x] Add unit tests and
+- [ ] Add UI tests
+- [ ] Improve offline-first strategy (single source of truth with Flow)
+- [ ] Add loading skeletons instead of simple indicators
+- [ ] Implement Paging 3 for robust pagination
+- [ ] Enhance error handling with better user feedback

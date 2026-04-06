@@ -1,10 +1,10 @@
-package com.estebanposada.data.models.repository
+package com.estebanposada.data.repository
 
-import com.estebanposada.data.models.local.CharacterDao
-import com.estebanposada.data.models.remote.ApiService
-import com.estebanposada.data.models.remote.safeApiCall
-import com.estebanposada.data.models.toDomain
-import com.estebanposada.data.models.toEntity
+import com.estebanposada.data.local.CharacterDao
+import com.estebanposada.data.remote.ApiService
+import com.estebanposada.data.remote.safeApiCall
+import com.estebanposada.data.toDomain
+import com.estebanposada.data.toEntity
 import com.estebanposada.domain.Resource
 import com.estebanposada.domain.models.Character
 import com.estebanposada.domain.repository.CharacterRepository

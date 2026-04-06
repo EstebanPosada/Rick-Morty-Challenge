@@ -1,23 +1,11 @@
-package com.estebanposada.data.models
+package com.estebanposada.data
 
-import com.estebanposada.data.models.local.CharacterEntity
-import com.estebanposada.data.models.model.CharacterDto
+import com.estebanposada.data.local.CharacterEntity
+import com.estebanposada.data.model.CharacterDto
 import com.estebanposada.domain.models.Character
 import com.estebanposada.domain.models.Gender
 import com.estebanposada.domain.models.Origin
 import com.estebanposada.domain.models.Status
-
-fun CharacterDto.toCharacter() = Character(
-    id = id,
-    name = name,
-    gender = gender.toGender(),
-    species = species,
-    type = type,
-    status = status.toStatus(),
-    origin = Origin(name = name, url = name),
-    location = Origin(name = name, url = name),
-    image = image,
-)
 
 fun String.toGender() = when (lowercase()) {
     "male" -> Gender.MALE

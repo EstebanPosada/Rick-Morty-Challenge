@@ -1,4 +1,4 @@
-package com.estebanposada.data.models.remote
+package com.estebanposada.data.remote
 
 import com.estebanposada.domain.AppError
 import com.estebanposada.domain.Resource

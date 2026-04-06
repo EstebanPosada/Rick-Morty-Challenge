@@ -2,7 +2,7 @@ package com.estebanposada.rickmorty_app.di
 
 import android.content.Context
 import androidx.room.Room
-import com.estebanposada.data.models.local.AppDataBase
+import com.estebanposada.data.local.AppDataBase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

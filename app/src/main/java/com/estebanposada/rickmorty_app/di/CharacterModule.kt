@@ -1,6 +1,6 @@
 package com.estebanposada.rickmorty_app.di
 
-import com.estebanposada.data.models.repository.CharacterRepositoryImpl
+import com.estebanposada.data.repository.CharacterRepositoryImpl
 import com.estebanposada.domain.repository.CharacterRepository
 import dagger.Binds
 import dagger.Module

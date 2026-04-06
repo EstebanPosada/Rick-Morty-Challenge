@@ -1,7 +1,7 @@
-package com.estebanposada.data.models.remote
+package com.estebanposada.data.remote
 
-import com.estebanposada.data.models.model.CharacterDto
-import com.estebanposada.data.models.model.CharacterListResponse
+import com.estebanposada.data.model.CharacterDto
+import com.estebanposada.data.model.CharacterListResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

@@ -1,6 +1,6 @@
 package com.estebanposada.rickmorty_app.di
 
-import com.estebanposada.data.models.remote.ApiService
+import com.estebanposada.data.remote.ApiService
 import com.estebanposada.rickmorty_app.BuildConfig
 import dagger.Module
 import dagger.Provides

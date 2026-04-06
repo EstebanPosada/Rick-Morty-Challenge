@@ -35,7 +35,7 @@ class CharacterListViewModel @Inject constructor(
             _state.update { it.copy(isLoading = true, error = null) }
             getCharactersUseCase(page = 1).onSuccess { characters ->
                 val items = characters.map { it.toUi() }
-                currentPage = 1
+                currentPage++
                 hasMore = items.isNotEmpty()
                 _state.update { it.copy(data = items, isLoading = false) }
             }.onFailure { error ->
@@ -59,7 +59,6 @@ class CharacterListViewModel @Inject constructor(
             getCharactersUseCase(currentPage++).onSuccess { characters ->
                 val newItems = characters.map { it.toUi() }
                 hasMore = newItems.isNotEmpty()
-                currentPage++
                 _state.update {
                     it.copy(
                         data = (it.data + newItems).distinctBy { item -> item.id },

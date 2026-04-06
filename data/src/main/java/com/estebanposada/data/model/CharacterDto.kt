@@ -1,4 +1,4 @@
-package com.estebanposada.data.models.model
+package com.estebanposada.data.model
 
 data class CharacterDto(
     val id: String,

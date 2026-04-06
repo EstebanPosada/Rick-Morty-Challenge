@@ -20,7 +20,7 @@ class CharacterDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     companion object {
-        private const val CHARACTER_ID = "characterId"
+        const val CHARACTER_ID = "characterId"
     }
 
     private val _state = MutableStateFlow<CharacterDetailState>(CharacterDetailState.Loading)
@@ -36,7 +36,9 @@ class CharacterDetailViewModel @Inject constructor(
             _state.value = CharacterDetailState.Loading
             getCharacterDetailUseCase(characterId).onSuccess { detail ->
                 _state.value = CharacterDetailState.Success(detail.toDetailUi())
-            }.onFailure { _state.value = CharacterDetailState.Error(it.toUserMessage()) }
+            }.onFailure {
+                _state.value = CharacterDetailState.Error(it.toUserMessage())
+            }
         }
     }
 
