@@ -47,7 +47,7 @@ This approach allows:
 
 # 🌐 Networking
 Implemented using Retrofit
-All API calls are wrapped with a safeApiCall helper returning a Resource type:
+All API calls are wrapped using a safeApiCall helper that returns a Resource type, which standardizes success and error handling across the app
 * Success
 * Error (mapped to domain-level errors)
 
